@@ -78,27 +78,37 @@
                 				<th>Customer Id</th>
                 				<th>Time Elasped</th>
                 				<th>Status</th>
-                				<th>Driver</th>
+                				<th>Driver Id</th>
                 				
                 			</tr>
                 		</thead>
                 		<tbody>
+	                		{{#each rides}}
                 			<tr>
-        						<td data-title="RequestId">88887</td>
-                				<td data-title="CustomerId">122</td>
+	                			
+        						<td data-title="RequestId">{{this._id}}</td>
+                				<td data-title="CustomerId">{{this.customerId}}</td>
                 				<td data-title="TimeElasped">11 mins</td>
-                				<td data-title="Status">On going</td>
-                				<td data-title="Driver">Eesh</td>
+                				{{#if this.status}}
+                				
+                					{{#if this.completionTime}}
+										<td data-title="Status">Completed</td>
+									{{else}}
+										<td data-title="Status">On going</td>
+									{{/if}}
+									
+                				{{else }}
+                				<td data-title="Status">Waiting</td>
+                				
+                				
+                				{{/if}}
+                				
+                				<td data-title="Driver">{{this.driverId}}</td>
+                				
                 				
                 			</tr>
-                			<tr>
-        						<td data-title="RequestId">56452</td>
-                				<td data-title="CustomerId">329</td>
-                				<td data-title="TimeElasped">35 min</td>
-                				<td data-title="Status">On going</td>
-                				<td data-title="Driver">Shivika</td>
-                				
-                			</tr>
+                			{{/each}}
+                			
                 			
             		</tbody>
             	</table>
@@ -117,7 +127,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; OlaAuto 2016</p>
+                    <p>Copyright &copy; OlaAuto 2017</p>
                 </div>
             </div>
         </footer>

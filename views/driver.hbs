@@ -195,7 +195,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; OlaAuto 2016</p>
+                    <p>Copyright &copy; OlaAuto 2017</p>
                 </div>
             </div>
         </footer>
@@ -208,7 +208,15 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="./../js/bootstrap.min.js"></script>
-
+    
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+     var socket = io.connect('http://localhost:5000');
+     socket.on('ride_waiting', function(ride_id){
+	     alert(" ride is waiting "+ride_id);
+	 	
+	 }); 
+</script>
 </body>
 
 </html>

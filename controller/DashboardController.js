@@ -1,8 +1,17 @@
  DashboardController = {};
  
+ var Rides = require("../models/rides.server.model.js");
+ 
  DashboardController.index = function(req,res){
 	 
-	 res.render("dashboard");
+	 var r = Rides.find(function(err,results) {
+		 
+		  console.log(results);
+	 
+	 res.render("dashboard",{rides:results});
+		 
+	 });
+	
  }
  
  
