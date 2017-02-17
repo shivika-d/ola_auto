@@ -44,8 +44,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active">
-                       <a href="//{{domain}}/customer">Customer</a>
+                    <li >
+                        <a href="//{{domain}}/customer">Customer</a>
                     </li>
                     <li class="active">
                         <a href="//{{domain}}/driver">Driver</a>
@@ -61,31 +61,40 @@
     </nav>
 
     <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-
-          
-
-            <div class="col-md-6">
-
-                <form method="post" action="./request_ride/" id="ride_form">
-  <div class="form-group">
-    <label >Customer id:</label>
-    <input type="text" class="form-control" id="customer_id" required="true" name="customer_id">
-  </div>
-   <button type="submit" class="btn btn-success" id="ride_now">Ride Now</button>
-</form>
-
-              
-
-            </div>
-            
-           
-
+    
+    
+            <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center">
+                        Driver List
+                    </h2>
+                </div>
+                <div id="no-more-tables">
+                
+                	<ul >
+                    <li class="active">
+                        <a href="//{{domain}}/driver/1">Driver 1</a>
+                    </li>
+                    <li class="active">
+                       <a href="//{{domain}}/driver/2">Driver 2</a>
+                    </li>
+                    <li class="active">
+                        <a href="//{{domain}}/driver/3">Driver 3</a>
+                    </li>
+                    <li class="active">
+                       <a href="//{{domain}}/driver/4">Driver 4</a>
+                    </li>
+                    <li class="active">
+                        <a href="//{{domain}}/driver/5">Driver 5</a>
+                    </li>
+                </ul>
+                
+                </div>
         </div>
-
     </div>
+
+
     <!-- /.container -->
 
     <div class="container">
@@ -109,28 +118,6 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
-    
-    <script src="/socket.io/socket.io.js"></script>
-    
-    <script>
-	    var socket = io.connect('http://localhost:5000');
-	    $("#ride_form").submit(function(event){
-		    
-		    event.preventDefault();
-		    
-		    if($("#customer_id").val()){
-			    
-			    $.post( "./request_ride/",{customer_id:$("#customer_id").val()}, function( data ) {
-				  alert("request sent");
-				  socket.emit("request_ride",{ride_id:"123"});
-				});
-		    }
-		    
-		    
-	    });
-	    
-	    
-	</script>
 
 </body>
 

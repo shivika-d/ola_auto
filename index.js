@@ -2,13 +2,15 @@ var express = require("express");
 
 var app = express();
 
+var Config = require("./config.js");
+
 var mongoose = require("mongoose");
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb://ola_auto:testing@ds153659.mlab.com:53659/ola_auto");
+mongoose.connect("mongodb://"+Config.db_username+":"+Config.db_password+"@"+Config.db_url);
 
 /*
 app.listen(5000,function(err){
@@ -21,7 +23,7 @@ app.listen(5000,function(err){
 //var io = require('socket.io')(http);
 
 var Rides = require("./models/rides.server.model.js");
-var io = require('socket.io').listen(app.listen(5000));
+var io = require('socket.io').listen(app.listen(Config.port));
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -44,7 +46,7 @@ io.on('connection', function(socket){
 					    console.log(" ride up");
 						io.emit('ride_over', {ride_id:data.id,driver_id:data.driver_id});
 				    }})
-		    }, 6000);
+		    }, 30000);
 	    }
     })
     
@@ -71,3 +73,4 @@ app.get("/driver/:id",BookingController.driver);
 app.post("/driver/completed",BookingController.completed);
 app.post("/driver/waiting",BookingController.waiting);
 app.post("/driver/going",BookingController.going);
+app.get("/driver",BookingController.driverlist);

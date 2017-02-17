@@ -45,13 +45,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li >
-                        <a href="#">Customer</a>
-                    </li>
-                    <li >
-                        <a href="#">Driver</a>
+                        <a href="//{{domain}}/customer">Customer</a>
                     </li>
                     <li class="active">
-                        <a href="#">Admin panel</a>
+                        <a href="//{{domain}}/driver">Driver</a>
+                    </li>
+                    <li>
+                        <a href="//{{domain}}/dashboard">Admin panel</a>
                     </li>
                 </ul>
             </div>
@@ -76,7 +76,7 @@
                 			<tr>
         						<th>  Request Id    </th>
                 				<th>Customer Id</th>
-                				<th>Time Elasped</th>
+                				<th>Request Time</th>
                 				<th>Status</th>
                 				<th>Driver Id</th>
                 				
@@ -88,7 +88,7 @@
 	                			
         						<td data-title="RequestId">{{this._id}}</td>
                 				<td data-title="CustomerId">{{this.customerId}}</td>
-                				<td data-title="TimeElasped">11 mins</td>
+                				<td data-title="TimeElasped">{{this.requestTime}}</td>
                 				{{#if this.status}}
                 				
                 					{{#if this.completionTime}}

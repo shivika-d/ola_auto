@@ -1,13 +1,17 @@
  BookingController = {};
 
 var Rides = require("../models/rides.server.model.js");
+var Config = require("./../config.js");
 
 
-
+BookingController.driverlist = function(req,res){
+	 
+	 res.render("driverlist",{domain:Config.base_url});
+ }
  
  BookingController.customer = function(req,res){
 	 
-	 res.render("customer");
+	 res.render("customer",{domain:Config.base_url});
  }
  
  
@@ -17,7 +21,7 @@ BookingController.driver = function(req,res){
 		 
 		  console.log(results);
 	 
-	 res.render("driver",{driver_id:req.params.id});
+	 res.render("driver",{driver_id:req.params.id,domain:Config.base_url});
 		 
 	 });
 	 
