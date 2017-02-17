@@ -61,7 +61,7 @@
     </nav>
 
     <!-- Page Content -->
-    <div class="container">
+    <div class="container" ng-app="myApp" ng-controller="myCtrl">
 
         <div class="row">
 
@@ -76,40 +76,20 @@
                     </div>
 
                     <hr>
-
+					<div  ng-repeat="ride in waiting.rides">
                     <div class="row">
                         <div class="col-md-12">
                             
-                            <span>Request Id:</span>
+                            <span>Request Id:[[ride._id]]</span>
                             <span class="pull-right">10 min ago</span>
-                            <p>Customer Id:</p>
-                            <button type="button" class="btn btn-success">Accept</button>
+                            <p>Customer Id:[[ride.customerId]]</p>
+                            <button type="button" class="btn btn-success" ng-click="accept([[ride._id]])">Accept</button>
                         </div>
                     </div>
 
                     <hr>
+					</div>
 
-                    <div class="row">
-                         <div class="col-md-12">
-                            
-                            <span>Request Id:</span>
-                            <span class="pull-right">11 min ago</span>
-                            <p>Customer Id:</p>
-                            <button type="button" class="btn btn-success">Accept</button>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            
-                            <span>Request Id:</span>
-                            <span class="pull-right">18 min ago</span>
-                            <p>Customer Id:</p>
-                            <button type="button" class="btn btn-success">Accept</button>
-                        </div>
-                    </div>
 
                 </div>
             </div> 
@@ -123,33 +103,22 @@
                     </div>
 
                     <hr>
+                    <div ng-repeat="ride in going.rides">
 
-                   <div class="row">
+                   <div class="row" >
                         <div class="col-md-12">
                             
-                            <span>Request Id:</span>
+                            <span>Request Id:[[ride._id]]</span>
                             <span class="pull-right">10 min ago</span>
-                            <p>Customer Id:</p>
+                            <p>Customer Id:[[ride.customerId]]</p>
                             
                         </div>
                     </div>
 
 
                     <hr>
-
-                   <div class="row">
-                        <div class="col-md-12">
-                            
-                            <span>Request Id:</span>
-                            <span class="pull-right">10 min ago</span>
-                            <p>Customer Id:</p>
-                            
-                        </div>
                     </div>
-
-
-                    <hr>
-
+                   
                   
                 </div>
             </div> 
@@ -163,20 +132,19 @@
                     </div>
 
                     <hr>
-
-                    <div class="row">
+                    <div ng-repeat="ride in completed.rides">
+                    <div class="row" >
                         <div class="col-md-12">
-                            
-                            <span>Request Id:</span>
+                            <span>Request Id:[[ride._id]]</span>
                             <span class="pull-right">10 min ago</span>
-                            <p>Customer Id:</p>
+                            <p>Customer Id:[[ride.customerId]]</p>
                            
                         </div>
                     </div>
 
 
                     <hr>
-
+                    </div>
                    
 
                 </div>
@@ -206,11 +174,99 @@
     <!-- jQuery -->
     <script src="./../js/jquery.js"></script>
 
+	<script src="./../lib/angular/angular.min.js"></script>
+	
+	
     <!-- Bootstrap Core JavaScript -->
     <script src="./../js/bootstrap.min.js"></script>
     
     <script src="/socket.io/socket.io.js"></script>
     <script>
+	    
+	  
+	  
+	  
+	  var app = angular.module('myApp', []).config(['$interpolateProvider', function ($interpolateProvider) {
+	    $interpolateProvider.startSymbol('[[');
+	    $interpolateProvider.endSymbol(']]');
+	  }]);;
+		app.controller('myCtrl', function($scope) {
+			$scope.completed= [];
+			$scope.going=[];
+			$scope.waiting = [];
+			$scope.s = "34"
+			$.post( "./completed/",{driver_id:'{{driver_id}}'}, function( data ) {
+				$scope.completed = data;		    
+			
+			
+				
+			});
+			$.post( "./waiting/",{driver_id:'{{driver_id}}'}, function( data ) {
+				$scope.waiting = data;
+						$scope.$apply();				    
+			
+			
+				
+			});
+			$.post( "./going/",{driver_id:'{{driver_id}}'}, function( data ) {
+				$scope.going = data;
+						$scope.$apply();				    
+			
+			
+				
+			});	
+			
+			$scope.accept = function(id) {
+				
+				socket.emit("ride_accept",{"id":id,"driver_id":'{{driver_id}}'});
+			}	
+			
+			socket.on("ride_taken",function(data){
+				
+				console.log("taken ride : ",data.ride_id);
+				var i = -1;
+				$scope.waiting.rides.forEach(function(ele,index,array){
+					if(ele._id == data.ride_id[0]){
+						i = index;
+					}
+				})					
+			
+				if(i>-1){
+					if(data.driver_id == {{driver_id}}){
+						$scope.going.rides.unshift($scope.waiting.rides[i]);
+					}
+					$scope.waiting.rides.splice(i,1);
+					$scope.$apply();
+					
+				}
+				
+				
+			});
+			
+			socket.on("ride_over",function(data){
+				
+				if(data.driver_id == {{driver_id}}){
+					var i = -1;
+					$scope.going.rides.forEach(function(ele,index,array){
+						if(ele._id == data.ride_id[0]){
+							i = index;
+						}
+					})					
+				
+					if(i>-1){
+						$scope.completed.rides.unshift($scope.going.rides[i]);
+						
+						$scope.going.rides.splice(i,1);
+						$scope.$apply();
+						
+					}
+					
+				}
+				
+			})    
+		});
+	    
+	    
      var socket = io.connect('http://localhost:5000');
      socket.on('ride_waiting', function(ride_id){
 	     alert(" ride is waiting "+ride_id);

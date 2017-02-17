@@ -12,11 +12,48 @@ var Rides = require("../models/rides.server.model.js");
  
  
 BookingController.driver = function(req,res){
-	 var r = Rides.find({driverId:req.params.id},function(err,results) {
+	 var r = Rides.find({driverId:req.params.id});
+	 r.exec(function(err,results) {
 		 
 		  console.log(results);
 	 
-	 res.render("driver",{rides:results});
+	 res.render("driver",{driver_id:req.params.id});
+		 
+	 });
+	 
+ }
+ 
+ BookingController.completed = function(req,res){
+	 var r = Rides.find({driverId:req.body.driver_id,status:2});
+	 r.exec(function(err,results) {
+		 
+		  console.log(results);
+	 
+	 res.send({rides:results});
+		 
+	 });
+	 
+ }
+ 
+ BookingController.waiting = function(req,res){
+	 var r = Rides.find({status:0});
+	 r.exec(function(err,results) {
+		 
+		  console.log(results);
+	 
+	 res.send({rides:results});
+		 
+	 });
+	 
+ }
+ 
+ BookingController.going = function(req,res){
+	 var r = Rides.find({driverId:req.body.driver_id,status:1});
+	 r.exec(function(err,results) {
+		 
+		  console.log(results);
+	 
+	 res.send({rides:results});
 		 
 	 });
 	 
